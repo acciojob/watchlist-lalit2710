@@ -13,10 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("movies")
 public class MovieController {
-    HashMap<Double, Movie> movies = new HashMap<>();
-    HashMap<Double,Director> directorname = new HashMap<>();
+    HashMap<String, Movie> movies = new HashMap<>();
+    HashMap<String,Director> directorname = new HashMap<>();
 
-    HashMap<Director,List<Movie>> directormoviepair = new HashMap<>();
+    HashMap<String,List<Movie>> directormoviepair = new HashMap<>();
 
     @GetMapping("/get-all-movies")
     public ResponseEntity <List<Movie>> findAllMovies() {
@@ -42,18 +42,24 @@ public class MovieController {
 
     @PostMapping("/add-movie")
     public ResponseEntity<String> addMovie(@RequestBody()Movie movie){
-        movies.put(movie.getImdbRating(),movie);
+        movies.put(movie.getName(),movie);
         return new ResponseEntity<>("SUCCESS",HttpStatus.CREATED);
     }
     @PostMapping("/add-director")
     public ResponseEntity<String> addDirector(@RequestBody()Director director){
-        directorname.put(director.getImdbRating(),director);
+        directorname.put(director.getName(),director);
         return new ResponseEntity<>("SUCCESS",HttpStatus.CREATED);
     }
-//    @PutMapping("/add-movie-director-pair")
-//    public ResponseEntity addMovieDirectorPair (@RequestParam String moviename,@RequestParam String directorname){
-//        directormoviepair.put();
-//    }
+    @PutMapping("/add-movie-director-pair")
+    public ResponseEntity addMovieDirectorPair (@RequestParam String moviename,@RequestParam String directorname){
+        if(directormoviepair.containsKey(directorname)){
+            directormoviepair.get(directorname).add(movies.get(moviename));
+        }else {
+         directormoviepair.put(directorname,new ArrayList<>());
+            directormoviepair.get(directorname).add(movies.get(moviename));
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
 
 }
