@@ -13,13 +13,13 @@ import java.util.List;
 @RestController
 @RequestMapping("movies")
 public class MovieController {
-    HashMap<Integer, Movie> movies = new HashMap<>();
-    HashMap<Integer,Director> directorname = new HashMap<>();
+    HashMap<Double, Movie> movies = new HashMap<>();
+    HashMap<Double,Director> directorname = new HashMap<>();
 
     HashMap<Director,List<Movie>> directormoviepair = new HashMap<>();
 
-    @GetMapping("/get-movie-by-name/{name}")
-    public ResponseEntity <List<Movie>> getAllMovies() {
+    @GetMapping("/get-all-movies")
+    public ResponseEntity <List<Movie>> findAllMovies() {
 
         List<Movie> listofMovie = new ArrayList<>();
         for (Movie movie : movies.values()) {
@@ -30,7 +30,7 @@ public class MovieController {
         }
         return new ResponseEntity<>(listofMovie, HttpStatus.OK);
     }
-    @GetMapping("/get-director-by-name/{name}")
+    @GetMapping("/get-director")
     public ResponseEntity <List<Director>> getAllDirector() {
 
         List<Director> listofDirector = new ArrayList<>();
@@ -42,12 +42,12 @@ public class MovieController {
 
     @PostMapping("/add-movie")
     public ResponseEntity<String> addMovie(@RequestBody()Movie movie){
-        movies.put(movie.getId(),movie);
+        movies.put(movie.getImdbRating(),movie);
         return new ResponseEntity<>("SUCCESS",HttpStatus.CREATED);
     }
     @PostMapping("/add-director")
     public ResponseEntity<String> addDirector(@RequestBody()Director director){
-        directorname.put(director.getId(),director);
+        directorname.put(director.getImdbRating(),director);
         return new ResponseEntity<>("SUCCESS",HttpStatus.CREATED);
     }
 //    @PutMapping("/add-movie-director-pair")
